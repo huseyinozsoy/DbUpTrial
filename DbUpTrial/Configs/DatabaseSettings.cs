@@ -1,6 +1,6 @@
 ﻿namespace DbUpTrial.Configs
 {
-    public class DatabaseConfig
+    public class DatabaseSettings
     {
         public string ConnectionString { get; set; }
     }

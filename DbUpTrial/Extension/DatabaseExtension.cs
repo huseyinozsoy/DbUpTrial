@@ -1,13 +1,10 @@
 ﻿using DbUp;
+using DbUpTrial.Configs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace DbUpTrial.Extension
 {
@@ -23,13 +20,13 @@ namespace DbUpTrial.Extension
 
                 logger.LogInformation("Migrating postresql database.");
 
-                string connection = configuration.GetValue<string>("DatabaseSettings:ConnectionString");
+                var connectionString = configuration.GetSection(nameof(DatabaseSettings))[nameof(DatabaseSettings.ConnectionString)];
 
                 // this will ensure that the database is created
-                EnsureDatabase.For.PostgresqlDatabase(connection);
+                EnsureDatabase.For.PostgresqlDatabase(connectionString);
 
                 var upgrader = DeployChanges.To
-                    .PostgresqlDatabase(connection)
+                    .PostgresqlDatabase(connectionString)
                     .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
                     .LogToConsole()
                     .Build();
